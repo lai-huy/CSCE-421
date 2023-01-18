@@ -1,1 +1,8 @@
+bin\
+include\
+lib\
+lib64\
+Scripts\
+pyvenv.cfg
+
 Textbook.pdf
