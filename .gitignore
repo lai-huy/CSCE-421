@@ -2,7 +2,8 @@ bin/
 include/
 lib/
 Scripts/
-pyvenv.cfg
-lib64
+Classwork/
 
+pyvenv.cfg
 Textbook.pdf
+lib64
