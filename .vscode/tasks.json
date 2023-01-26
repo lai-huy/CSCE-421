@@ -1,0 +1,34 @@
+{
+     "tasks": [
+          {
+               "type": "cppbuild",
+               "label": "build file",
+               "command": "/usr/bin/g++",
+               "args": [
+                    "-fdiagnostics-color=always",
+                    "-std=c++17",
+                    "-g",
+                    "-Wall",
+                    "-Wextra",
+                    "-Weffc++",
+                    "-pedantic-errors",
+                    "-fsanitize=address,undefined",
+                    "*.cpp",
+                    "-o",
+                    "main.debug"
+               ],
+               "options": {
+                    "cwd": "${fileDirname}"
+               },
+               "problemMatcher": [
+                    "$gcc"
+               ],
+               "group": {
+                    "kind": "build",
+                    "isDefault": true
+               },
+               "detail": "Compile and debug"
+          }
+     ],
+     "version": "2.0.0"
+}

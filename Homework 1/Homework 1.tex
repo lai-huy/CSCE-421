@@ -1,0 +1,264 @@
+\documentclass{article}
+\usepackage[final]{neurips_2022}
+
+\usepackage[utf8]{inputenc} % allow utf-8 input
+\usepackage[T1]{fontenc}    % use 8-bit T1 fonts
+\usepackage{hyperref}       % hyperlinks
+\usepackage{url}            % simple URL typesetting
+\usepackage{booktabs}       % professional-quality tables
+\usepackage{amsmath}
+\usepackage{amsfonts}       % blackboard math symbols
+\usepackage{nicefrac}       % compact symbols for 1/2, etc.
+\usepackage{microtype}      % microtypography
+\usepackage{xcolor}         % colors
+
+\DeclareMathOperator{\sech}{sech}
+\DeclareMathOperator{\csch}{csch}
+\DeclareMathOperator{\arcsec}{arcsec}
+\DeclareMathOperator{\arccot}{arcCot}
+\DeclareMathOperator{\arccsc}{arcCsc}
+\DeclareMathOperator{\arccosh}{arcCosh}
+\DeclareMathOperator{\arcsinh}{arcsinh}
+\DeclareMathOperator{\arctanh}{arctanh}
+\DeclareMathOperator{\arcsech}{arcsech}
+\DeclareMathOperator{\arccsch}{arcCsch}
+\DeclareMathOperator{\arccoth}{arcCoth} 
+
+\title{Homework 1}
+\author{
+  Huy Quang Lai \\
+  Department of Computer Science and Engineering\\
+  Texas A\&M University\\
+  College Station, Texas 77843 \\
+  \texttt{lai.huy@tamu.edu}
+}
+
+\begin{document}
+\maketitle
+
+\section{Gradient Calculation}
+In this question you are required to calculate gradients for 2 scalar functions.
+
+\subsection{\texorpdfstring{$\displaystyle f(x,y)=x^2+\ln{(y)}+xy+y^3$}{f(x,y)=x²+ln(y)+xy+y³}}
+
+\begin{flalign*}
+\nabla f(x,y)   &=\left\langle \frac{\partial f}{\partial x}(x,y),\frac{\partial f}{\partial y}(x,y)\right\rangle           &\\
+                &=\left\langle 2x+y, \frac{1}{y}+x+3y^2\right\rangle    &\\
+\end{flalign*}
+$\displaystyle\nabla f(10,-10)=\langle10,309.9\rangle$
+
+\subsection{\texorpdfstring{$\displaystyle f(x,y,z)=\tanh\left(x^3y^3\right)+\sin\left(z^2\right)$}{f(x,y,z)=tanh(x³y³)+sin(z²)}}
+
+\begin{flalign*}
+\nabla f(x,y,z) &= \left\langle\frac{\partial f}{\partial x}f(x,y,z),\frac{\partial f}{\partial y}f(x,y,z),\frac{\partial f}{\partial z}f(x,y,z)\right\rangle   &\\
+                &= \left\langle3x^2y^3\sech^2(x^3y^3),3x^3y^2\sech^2(x^3y^3),2z\cos\left(z^2\right)\right\rangle
+\end{flalign*}
+$\displaystyle \nabla f\left(-1,0,\frac{\pi}{2}\right)=\left\langle0,0,\cos\left(\frac{\pi^2}{4}\right)\right\rangle$
+
+\clearpage
+\section{Matrix multiplication}
+In this question you are required to perform matrix multiplication.
+
+\subsection{Multiplication 1}
+$\begin{bmatrix}
+10 \\ -5 \\ 2  \\ 8
+\end{bmatrix}\begin{bmatrix}
+0 & 3 & 0 & 1
+\end{bmatrix}=\begin{bmatrix}
+0 & 30 & 0 & 10 \\
+0 & -15 & 0 & -5 \\
+0 & 6 & 0 & 2 \\
+0 & 24 & 0 & 8 \\
+\end{bmatrix}$
+
+\subsection{Multiplication 2}
+$\begin{bmatrix}
+7 & -3 & 1 & 9
+\end{bmatrix}\begin{bmatrix}
+-3 \\ -4 \\ 6 \\ 0\end{bmatrix}=\begin{bmatrix}-3\end{bmatrix}$
+
+\subsection{Multiplication 3}
+$\begin{bmatrix}
+1 & -1 & 6 & 7 \\
+9 & 0 & 8 & 1 \\
+-8 & 1 & 2 & 3 \\
+10 & 4 & 0 & 1 \\
+\end{bmatrix}\begin{bmatrix}
+6 & 2 & 0 \\
+0 & -1 & 1 \\
+-3 & 0 & 4 \\
+3 & 4 & 7
+\end{bmatrix}=\begin{bmatrix}
+9 & 31 & 72 \\
+33 & 22 & 39 \\
+-45 & -5 & 30 \\
+63 & 20 & 11
+\end{bmatrix}$
+
+\section{Vector Norms}
+Consider these two points in the 3-dimensional space:
+\[
+\mathbf{a}=\begin{bmatrix}
+7 \\ 0 \\ -1    
+\end{bmatrix},\mathbf{b}=\begin{bmatrix}
+7 \\ 9 \\ -5
+\end{bmatrix}
+\]
+Calculate their distance using the following norms:
+\[\mathbf{a}-\mathbf{b}=\begin{bmatrix}0 \\ -9 \\ 4\end{bmatrix}\]
+
+\subsection{\texorpdfstring{$l_{0}$}{l0}}
+Since there are two non-zero terms in the vector $\mathbf{a}-\mathbf{b},l_0=2$
+\subsection{\texorpdfstring{$l_{1}$}{l1}}
+$l_1=-9+4=-5$
+\subsection{\texorpdfstring{$l_{2}$}{l2}}
+$l_2=\sqrt{(-9)^2+4^2}=\sqrt{97}$
+\subsection{\texorpdfstring{$l_{\infty}$}{l∞}}
+$l_{\infty}=4$
+
+\clearpage
+\section{Probability calculation}
+\subsection{Sample Space}
+Assume that the roll $(1,2)$ is an equivalent roll to $(2,1)$.
+\begin{flalign*}
+\mathbb{S}=\{   &(1,1),(1,2),(1,3),(1,4),(1,5),(1,6),   &\\
+                &(2,2),(2,3),(2,4),(2,5),(2,6),         &\\
+                &(3,3),(3,4),(3,5),(3,6),               &\\
+                &(4,4),(4,5),(4,6),                     &\\
+                &(5,5),(5,6)                            &\\
+                &(6,6)\}                                  
+\end{flalign*}
+
+\subsection{\texorpdfstring{$P\left(r_1+r_2=10\right)$}{P(r1+r2=10)}}
+$\displaystyle P\left(r_1+r_2=10\right)=\frac{2}{21}$
+\subsection{\texorpdfstring{$P\left(r_1+r_2=6\right)$}{P(r1+r2=6)}}
+$\displaystyle P\left(r_1+r_2=6\right)=\frac{1}{7}$
+
+\section{Mean and variance calculation}
+\subsection{What is the mean of \texorpdfstring{$X$}{X}?}
+Since $f_{X}(x)$ is a uniform distribution function, $\displaystyle\int_a^b f_{X}(x)dx=1$\\
+As a result,
+$\displaystyle\mu_{X}=\frac{1}{2}(a+b)$
+\subsection{What is the standard deviation of \texorpdfstring{$X$}{X}?}
+Likewise, $\displaystyle\sigma_{X}=\frac{b-a}{\sqrt{12}}$
+
+\clearpage
+\section{Classification Quality Metric Computation.}
+\subsection{Accuracy}
+$\displaystyle A=\frac{TP+TN}{TP+TN+FP+FN}=\frac{92}{160}=0.5750$
+
+\subsection{Balanced Accuracy}
+$\displaystyle\frac{1}{2}A_{+}+\frac{1}{2}A_{-}=\frac{1}{2}\left(\frac{TP}{TP+FN}+\frac{TN}{TN+FP}\right)=\frac{1}{2}\left(\frac{37}{60}+\frac{11}{20}\right)=\frac{7}{12}=0.5833$
+
+\subsection{Precision}
+$\displaystyle P=\frac{TP}{TP+FP}=\frac{37}{82}=0.4512$
+
+\subsection{Recall}
+$\displaystyle R=\frac{TP}{TP+FN}=\frac{37}{60}=0.6167$
+
+\subsection{F1-measure}
+$\displaystyle F_1=\frac{2TP}{2TP+FP+FN}=\frac{37}{71}=0.5211$
+
+\clearpage
+\section{Receiver operating characteristic computation}
+\begin{tabular}{c|c|ccccc}
+Predicted & Ground Truth & 0 & 0.25 & 0.5 & 0.75 & 1 \\ \hline
+5\%       & 0            & 1 & 0    & 0   & 0    & 0 \\
+10\%      & 0            & 1 & 0    & 0   & 0    & 0 \\
+15\%      & 1            & 1 & 0    & 0   & 0    & 0 \\
+20\%      & 0            & 1 & 0    & 0   & 0    & 0 \\
+35\%      & 1            & 1 & 1    & 0   & 0    & 0 \\
+50\%      & 0            & 1 & 1    & 1   & 0    & 0 \\
+60\%      & 0            & 1 & 1    & 1   & 0    & 0 \\
+65\%      & 1            & 1 & 1    & 1   & 0    & 0 \\
+70\%      & 1            & 1 & 1    & 1   & 0    & 0 \\
+90\%      & 1            & 1 & 1    & 1   & 1    & 0
+\end{tabular}
+
+\subsection{ROC value for a threshold value of 0}
+$FPR=1,TPR=1$
+\subsection{ROC value for a threshold value of 0.25}
+$FPR=0.4,TPR=0.8$
+\subsection{ROC value for a threshold value of 0.5}
+$FPR=0.2,TPR=0.6$
+\subsection{ROC value for a threshold value of 0.75}
+$FPR=0.0,TPR=0.2$
+\subsection{ROC value for a threshold value of 1}
+$FPR=0.0,TPR=0.0$
+\subsection{What would be the AUROC approximation using the above results}
+$AUROC_L=(0.2-0.0)(0.2)+(0.4-0.2)(0.6)+(1-0.4)(0.8)=0.64$
+
+\clearpage
+\section*{References}
+{
+\small
+[1] Watt, Jeremy, Borhani, Reza \ \& Katsaggelos, Aggelos Konstantinos\ (2016) Machine Learning Refined.
+
+[2] Konasani, Venkata Reddy \ \& Shailendra Kadre\ (2021) Machine Learning and Deep Learning Using Python and TensorFlow.
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{Checklist}
+\begin{enumerate}
+\item For all authors...
+\begin{enumerate}
+  \item Do the main claims made in the abstract and introduction accurately reflect the paper's contributions and scope?
+    \answerYes{}
+  \item Did you describe the limitations of your work?
+    \answerNA{}
+  \item Did you discuss any potential negative societal impacts of your work?
+    \answerNA{}
+  \item Have you read the ethics review guidelines and ensured that your paper conforms to them?
+    \answerYes{}
+\end{enumerate}
+
+
+\item If you are including theoretical results...
+\begin{enumerate}
+  \item Did you state the full set of assumptions of all theoretical results?
+    \answerYes{}
+        \item Did you include complete proofs of all theoretical results?
+    \answerYes{}
+\end{enumerate}
+
+
+\item If you ran experiments...
+\begin{enumerate}
+  \item Did you include the code, data, and instructions needed to reproduce the main experimental results (either in the supplemental material or as a URL)?
+    \answerNA{}
+  \item Did you specify all the training details (e.g., data splits, hyperparameters, how they were chosen)?
+    \answerNA{}
+        \item Did you report error bars (e.g., with respect to the random seed after running experiments multiple times)?
+    \answerNA{}
+        \item Did you include the total amount of compute and the type of resources used (e.g., type of GPUs, internal cluster, or cloud provider)?
+    \answerNA{}
+\end{enumerate}
+
+
+\item If you are using existing assets (e.g., code, data, models) or curating/releasing new assets...
+\begin{enumerate}
+  \item If your work uses existing assets, did you cite the creators?
+    \answerYes{}
+  \item Did you mention the license of the assets?
+    \answerNA{}
+  \item Did you include any new assets either in the supplemental material or as a URL?
+    \answerNA{}
+  \item Did you discuss whether and how consent was obtained from people whose data you're using/curating?
+    \answerNA{}
+  \item Did you discuss whether the data you are using/curating contains personally identifiable information or offensive content?
+    \answerNA{}
+\end{enumerate}
+
+
+\item If you used crowdsourcing or conducted research with human subjects...
+\begin{enumerate}
+  \item Did you include the full text of instructions given to participants and screenshots, if applicable?
+    \answerNA{}
+  \item Did you describe any potential participant risks, with links to Institutional Review Board (IRB) approvals, if applicable?
+    \answerNA{}
+  \item Did you include the estimated hourly wage paid to participants and the total amount spent on participant compensation?
+    \answerNA{}
+\end{enumerate}
+\end{enumerate}
+\end{document}
