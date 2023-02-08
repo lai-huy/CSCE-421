@@ -1,9 +1,4 @@
-bin/
-include/
-lib/
-Scripts/
 Classwork/
 
-pyvenv.cfg
 Textbook.pdf
-lib64
+Syllabus.pdf
