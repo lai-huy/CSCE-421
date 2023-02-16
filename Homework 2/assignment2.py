@@ -1,25 +1,21 @@
-################
-################
-# Q1
-################
-################
-
-import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
-from sklearn import metrics
-from sklearn.model_selection import train_test_split
-from sklearn.linear_model import LinearRegression, LogisticRegression
-from sklearn.metrics import f1_score
-from sklearn import metrics
-from sklearn.model_selection import GridSearchCV
-from sklearn.model_selection import StratifiedKFold
-from sklearn.metrics import roc_auc_score
-from sklearn.metrics import precision_score, recall_score
-from typing import Tuple, List
 import scipy.stats
-
-# Download and read the data.
+from typing import Tuple, List
+from sklearn.metrics import precision_score, recall_score
+from sklearn.metrics import roc_auc_score
+from sklearn.model_selection import StratifiedKFold
+from sklearn.model_selection import GridSearchCV
+from sklearn.metrics import f1_score
+from sklearn.linear_model import LinearRegression, LogisticRegression
+from sklearn.model_selection import train_test_split
+from sklearn import metrics
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+# ###############
+# ###############
+# Q1
+# ###############
+# ###############
 
 
 def read_data(filename: str) -> pd.DataFrame:
@@ -33,8 +29,10 @@ def read_data(filename: str) -> pd.DataFrame:
     """
     return pd.read_csv(filename)
 
-
+# %%
 # Prepare your input data and labels
+
+
 def prepare_data(df_train: pd.DataFrame, df_test: pd.DataFrame) -> tuple:
     """Seperate input data and labels, remove NaN values from both dataframes.
 
@@ -54,7 +52,10 @@ def prepare_data(df_train: pd.DataFrame, df_test: pd.DataFrame) -> tuple:
     test_label = df_test['y']
     return np.array(train_data).reshape(-1, 1), np.array(train_label).reshape(-1, 1), np.array(test_data).reshape(-1, 1), np.array(test_label).reshape(-1, 1)
 
+# %% [markdown]
 # Implement LinearRegression class
+
+# %%
 
 
 class LinearRegression_Local:
@@ -96,8 +97,10 @@ class LinearRegression_Local:
     def predict(self, X):
         return X.dot(self.W) + self.b
 
-
+# %%
 # Build your model
+
+
 def build_model(train_X: np.array, train_y: np.array):
     """Train a linear regression moddel
 
@@ -112,7 +115,10 @@ def build_model(train_X: np.array, train_y: np.array):
     model.fit(train_X, train_y)
     return model
 
+# %% [markdown]
 # Make predictions with test set
+
+# %%
 
 
 def pred_func(model: LinearRegression, X_test: np.array) -> np.array:
@@ -128,8 +134,10 @@ def pred_func(model: LinearRegression, X_test: np.array) -> np.array:
     x = np.array(model.predict(X_test))
     return x.reshape(-1, 1)
 
-
+# %%
 # Calculate and print the mean square error of your prediction
+
+
 def MSE(y_test: np.array, pred: np.array) -> np.array:
     """return the mean square error corresponding to your prediction
 
@@ -146,11 +154,14 @@ def MSE(y_test: np.array, pred: np.array) -> np.array:
 
     return np.square(np.subtract(y_test, pred)).mean()
 
-################
-################
+# %% [markdown]
+# ###############
+# ###############
 # Q2
-################
-################
+# ###############
+# ###############
+
+# %%
 
 
 def read_training_data(filename: str) -> tuple:
@@ -163,8 +174,10 @@ def read_training_data(filename: str) -> tuple:
     df2 = df1.iloc[:10]
     return df1, df2, df1.shape
 
-
+# %%
 # Prepare your input data and labels
+
+
 def data_clean(df_train: pd.DataFrame) -> tuple:
     '''
         check for any missing values in the data and store the missing values in series s, drop the entries corresponding 
@@ -174,6 +187,8 @@ def data_clean(df_train: pd.DataFrame) -> tuple:
     df_train = df_train.dropna()
     return s, df_train
 
+# %%
+
 
 def feature_extract(df_train: pd.DataFrame) -> tuple:
     '''
@@ -182,6 +197,8 @@ def feature_extract(df_train: pd.DataFrame) -> tuple:
         return a tuple of the form: (features(dtype: pandas.core.frame.DataFrame), label(dtype: pandas.core.series.Series))
     '''
     return df_train.drop(['NewLeague'], axis=1),  pd.Series(df_train['NewLeague'])
+
+# %%
 
 
 def data_preprocess(feature: pd.DataFrame) -> pd.DataFrame:
@@ -196,6 +213,8 @@ def data_preprocess(feature: pd.DataFrame) -> pd.DataFrame:
 
     return pd.concat([df_categorical, df_numerical], axis=1)
 
+# %%
+
 
 def label_transform(labels: pd.Series) -> pd.Series:
     '''
@@ -205,11 +224,14 @@ def label_transform(labels: pd.Series) -> pd.Series:
     labels = labels.replace('N', 1)
     return labels
 
-################
-################
+# %% [markdown]
+# ###############
+# ###############
 # Q3
-################
-################
+# ###############
+# ###############
+
+# %%
 
 
 def data_split(features: pd.DataFrame, label: pd.Series, random_state=42) -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
@@ -218,6 +240,8 @@ def data_split(features: pd.DataFrame, label: pd.Series, random_state=42) -> Tup
         return training and testing sets in the following order: X_train, X_test, y_train, y_test
     '''
     return train_test_split(features, label, test_size=0.2, random_state=random_state)
+
+# %%
 
 
 def train_linear_regression(x_train: np.ndarray, y_train: np.ndarray):
@@ -228,6 +252,8 @@ def train_linear_regression(x_train: np.ndarray, y_train: np.ndarray):
     model = LinearRegression()
     model.fit(x_train, y_train)
     return model
+
+# %%
 
 
 def train_logistic_regression(x_train: np.ndarray, y_train: np.ndarray, max_iter=1000000):
@@ -240,6 +266,8 @@ def train_logistic_regression(x_train: np.ndarray, y_train: np.ndarray, max_iter
     model.fit(x_train, y_train)
     return model
 
+# %%
+
 
 def models_coefficients(linear_model, logistic_model) -> Tuple[np.ndarray, np.ndarray]:
     '''
@@ -247,6 +275,8 @@ def models_coefficients(linear_model, logistic_model) -> Tuple[np.ndarray, np.nd
         and Logistic Regression Models respectively
     '''
     return linear_model.coef_, logistic_model.coef_
+
+# %%
 
 
 def linear_pred_and_area_under_curve(linear_model, x_test: np.ndarray, y_test: np.ndarray) -> Tuple[np.array, np.array, np.array, np.array, float]:
@@ -261,6 +291,8 @@ def linear_pred_and_area_under_curve(linear_model, x_test: np.ndarray, y_test: n
         y_test, pred)
     return linear_model.predict(x_test), fpr, tpr, thresholds, roc_auc_score(y_test, linear_model.predict(x_test))
 
+# %%
+
 
 def logistic_pred_and_area_under_curve(logistic_model, x_test: np.ndarray, y_test: np.ndarray) -> Tuple[np.array, np.array, np.array, np.array, float]:
     '''
@@ -269,9 +301,11 @@ def logistic_pred_and_area_under_curve(logistic_model, x_test: np.ndarray, y_tes
         [log_reg_pred, log_reg_fpr, log_reg_tpr, log_threshold, log_reg_area_under_curve]
         Finally plot the ROC Curve
     '''
-    fpr, tpr, thresholds = metrics.roc_curve(
-        y_test, logistic_model.predict(x_test))
-    return logistic_model.predict(x_test), fpr, tpr, thresholds, roc_auc_score(y_test, model.predict(x_test))
+    pred = logistic_model.predict(x_test)
+    fpr, tpr, thresholds = metrics.roc_curve(y_test, pred)
+    return pred, fpr, tpr, thresholds, roc_auc_score(y_test, pred)
+
+# %%
 
 
 def optimal_thresholds(linear_threshold: np.ndarray, linear_reg_fpr: np.ndarray, linear_reg_tpr: np.ndarray, log_threshold: np.ndarray, log_reg_fpr: np.ndarray, log_reg_tpr: np.ndarray) -> Tuple[float, float]:
@@ -280,12 +314,16 @@ def optimal_thresholds(linear_threshold: np.ndarray, linear_reg_fpr: np.ndarray,
     '''
     pass
 
+# %%
+
 
 def stratified_k_fold_cross_validation(num_of_folds: int, shuffle: True, features: pd.DataFrame, label: pd.Series):
     '''
         split the data into 5 groups. Checkout StratifiedKFold in scikit-learn
     '''
     pass
+
+# %%
 
 
 def train_test_folds(skf, num_of_folds: int, features: pd.DataFrame, label: pd.Series) -> Tuple[np.ndarray, np.ndarray, np.ndarray, dict]:
@@ -299,6 +337,8 @@ def train_test_folds(skf, num_of_folds: int, features: pd.DataFrame, label: pd.S
     '''
     pass
 
+# %%
+
 
 def is_features_count_changed(features_count: np.array) -> bool:
     '''
@@ -306,6 +346,8 @@ def is_features_count_changed(features_count: np.array) -> bool:
         return true if features count doesn't change in each fold. else return false
     '''
     pass
+
+# %%
 
 
 def mean_confidence_interval(data: np.array, confidence=0.95) -> Tuple[float, float, float]:
@@ -318,6 +360,7 @@ def mean_confidence_interval(data: np.array, confidence=0.95) -> Tuple[float, fl
     pass
 
 
+# %%
 if __name__ == "__main__":
 
     ################
