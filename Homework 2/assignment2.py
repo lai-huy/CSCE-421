@@ -1,4 +1,4 @@
-import scipy.stats
+import scipy.stats as st
 from typing import Tuple, List
 from sklearn.metrics import precision_score, recall_score
 from sklearn.metrics import roc_auc_score
@@ -16,6 +16,8 @@ import pandas as pd
 # Q1
 # ###############
 # ###############
+
+# Download and read the data.
 
 
 def read_data(filename: str) -> pd.DataFrame:
@@ -54,8 +56,6 @@ def prepare_data(df_train: pd.DataFrame, df_test: pd.DataFrame) -> tuple:
 
 # %% [markdown]
 # Implement LinearRegression class
-
-# %%
 
 
 class LinearRegression_Local:
@@ -114,9 +114,6 @@ def build_model(train_X: np.array, train_y: np.array):
     model = LinearRegression()
     model.fit(train_X, train_y)
     return model
-
-# %% [markdown]
-# Make predictions with test set
 
 # %%
 
@@ -279,7 +276,7 @@ def models_coefficients(linear_model, logistic_model) -> Tuple[np.ndarray, np.nd
 # %%
 
 
-def linear_pred_and_area_under_curve(linear_model, x_test: np.ndarray, y_test: np.ndarray) -> Tuple[np.array, np.array, np.array, np.array, float]:
+def linear_pred_and_area_under_curve(linear_model: LinearRegression, x_test: np.ndarray, y_test: np.ndarray) -> Tuple[np.array, np.array, np.array, np.array, float]:
     '''
         return the tuple consisting the predictions and area under the curve measurements of Linear Regression 
         and Logistic Regression Models respectively in the following order 
@@ -287,14 +284,14 @@ def linear_pred_and_area_under_curve(linear_model, x_test: np.ndarray, y_test: n
         Finally plot the ROC Curve
     '''
     pred = linear_model.predict(x_test)
-    fpr, tpr, thresholds = metrics.roc_curve(
-        y_test, pred)
-    return linear_model.predict(x_test), fpr, tpr, thresholds, roc_auc_score(y_test, linear_model.predict(x_test))
+    fpr, tpr, thresholds = metrics.roc_curve(y_test, pred)
+    score = metrics.roc_auc_score(y_test, pred)
+    return pred, fpr, tpr, thresholds, score
 
 # %%
 
 
-def logistic_pred_and_area_under_curve(logistic_model, x_test: np.ndarray, y_test: np.ndarray) -> Tuple[np.array, np.array, np.array, np.array, float]:
+def logistic_pred_and_area_under_curve(logistic_model: LogisticRegression, x_test: np.ndarray, y_test: np.ndarray) -> Tuple[np.array, np.array, np.array, np.array, float]:
     '''
         return the tuple consisting the predictions and area under the curve measurements of Linear Regression 
         and Logistic Regression Models respectively in the following order 
@@ -303,7 +300,8 @@ def logistic_pred_and_area_under_curve(logistic_model, x_test: np.ndarray, y_tes
     '''
     pred = logistic_model.predict(x_test)
     fpr, tpr, thresholds = metrics.roc_curve(y_test, pred)
-    return pred, fpr, tpr, thresholds, roc_auc_score(y_test, pred)
+    score = metrics.roc_auc_score(y_test, pred)
+    return pred, fpr, tpr, thresholds, score
 
 # %%
 
@@ -312,7 +310,9 @@ def optimal_thresholds(linear_threshold: np.ndarray, linear_reg_fpr: np.ndarray,
     '''
         return the tuple consisting the thresholds of Linear Regression and Logistic Regression Models respectively
     '''
-    pass
+    max_lin = np.argmax(linear_reg_tpr - linear_reg_fpr)
+    max_log = np.argmax(log_reg_tpr - log_reg_fpr)
+    return linear_threshold, log_threshold
 
 # %%
 
@@ -321,7 +321,8 @@ def stratified_k_fold_cross_validation(num_of_folds: int, shuffle: True, feature
     '''
         split the data into 5 groups. Checkout StratifiedKFold in scikit-learn
     '''
-    pass
+    strat = StratifiedKFold(n_splits=5, shuffle=shuffle)
+    return strat.get_n_splits(features, label)
 
 # %%
 
@@ -337,17 +338,16 @@ def train_test_folds(skf, num_of_folds: int, features: pd.DataFrame, label: pd.S
     '''
     pass
 
-# %%
-
 
 def is_features_count_changed(features_count: np.array) -> bool:
     '''
         compare number of features in each fold (features_count array's each element)
         return true if features count doesn't change in each fold. else return false
     '''
-    pass
-
-# %%
+    for i in range(len(features_count) - 1):
+        if features_count[i] != features_count[i - 1]:
+            return False
+    return True
 
 
 def mean_confidence_interval(data: np.array, confidence=0.95) -> Tuple[float, float, float]:
@@ -357,7 +357,10 @@ def mean_confidence_interval(data: np.array, confidence=0.95) -> Tuple[float, fl
         The required interval is from mean-h to mean+h
         return the tuple consisting of mean, mean -h, mean+h
     '''
-    pass
+    n = len(data)
+    m, se = np.mean(data), st.sem(data)
+    h = se * st.t.ppf((1 + confidence) / 2, n - 1)
+    return m, m - h, m + h
 
 
 # %%
@@ -368,8 +371,8 @@ if __name__ == "__main__":
     # Q1
     ################
     ################
-    data_path_train = "./path/train.csv"
-    data_path_test = "./path/test.csv"
+    data_path_train = "/LinearRegression/train.csv"
+    data_path_test = "/LinearRegression/test.csv"
     df_train, df_test = read_data(data_path_train), read_data(data_path_test)
 
     train_X, train_y, test_X, test_y = prepare_data(df_train, df_test)
@@ -394,7 +397,7 @@ if __name__ == "__main__":
     ################
     ################
 
-    data_path_training = "./path/Hitters.csv"
+    data_path_training = "Hitters.csv"
 
     train_df, df2, df_train_shape = read_training_data(data_path_training)
     s, df_train_mod = data_clean(train_df)
@@ -472,3 +475,5 @@ if __name__ == "__main__":
         f1_dict['linear_reg'])
     f1_log_mean, f1_log_open_interval, f1_log_close_interval = assignment2.mean_confidence_interval(
         f1_dict['log_reg'])
+
+# %%
