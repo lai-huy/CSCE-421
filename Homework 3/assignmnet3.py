@@ -1,20 +1,19 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
-from sklearn.model_selection import train_test_split
-from sklearn.neighbors import KNeighborsClassifier
-from typing import Tuple, List, Optional, Any, Callable, Dict, Union
-from sklearn.metrics import roc_curve, roc_auc_score
-from sklearn.linear_model import Ridge, Lasso
-from sklearn.metrics import roc_auc_score
-import random
 from typeguard import typechecked
+import random
+from sklearn.metrics import roc_auc_score
+from sklearn.linear_model import Ridge, Lasso
+from sklearn.metrics import roc_curve, roc_auc_score
+from typing import Tuple, List, Optional, Any, Callable, Dict, Union
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.model_selection import train_test_split
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
 
 random.seed(42)
 np.random.seed(42)
+
+# +
 
 
 @typechecked
@@ -22,10 +21,11 @@ def read_data(filename: str) -> pd.DataFrame:
     """
     Read the data from the filename. Load the data it in a dataframe and return it.
     """
-    ########################
-    ## Your Solution Here ##
-    ########################
-    pass
+    data: pd.DataFrame = pd.read_csv(filename)
+    data = data.dropna()
+    return data
+
+# +
 
 
 @typechecked
@@ -35,10 +35,14 @@ def data_preprocess(df: pd.DataFrame) -> Tuple[pd.DataFrame, pd.Series]:
     Return the final features and final label in same order
     You may use the same code you submiited for problem 2 of HW2
     """
-    #######################
-    ## Your Solution Here ##
-    ########################
-    pass
+    df_numerical: pd.DataFrame = df.select_dtypes(include=['int64', 'float64'])
+    df_categorical: pd.DataFrame = df.select_dtypes(
+        exclude=['int64', 'float64'])
+    df_categorical = pd.get_dummies(df_categorical)
+
+    return pd.concat([df_categorical, df_numerical], axis=1), pd.Series(df['NewLeague'])
+
+# +
 
 
 @typechecked
@@ -49,10 +53,11 @@ def data_split(
     Split 80% of data as a training set and the remaining 20% of the data as testing set
     return training and testing sets in the following order: X_train, X_test, y_train, y_test
     """
-    ########################
-    ## Your Solution Here ##
-    ########################
-    pass
+    x_train, x_test, y_train, y_test = train_test_split(
+        features, label, test_size=test_size)
+    return x_train, x_test, y_train, y_test
+
+# +
 
 
 @typechecked
@@ -74,9 +79,13 @@ def train_ridge_regression(
     aucs = {"ridge": []}
     lambda_vals = [1e-3, 1e-2, 1e-1, 1, 1e1, 1e2, 1e3]
 
-    ########################
-    ## Your Solution Here ##
-    ########################
+    for i in range(n):
+        for lambda_val in lambda_vals:
+            ridge = Ridge(alpha=lambda_val, max_iter=max_iter)
+            ridge.fit(x_train, y_train)
+            y_pred = ridge.predict(x_test)
+            auc = roc_auc_score(y_test, y_pred)
+            aucs["ridge"].append(auc)
 
     print("ridge mean AUCs:")
     ridge_aucs = pd.DataFrame(aucs["ridge"])
@@ -86,6 +95,8 @@ def train_ridge_regression(
         ridge_mean_auc[lambda_val] = ridge_auc
         print("lambda:", lambda_val, "AUC:", "%.4f" % ridge_auc)
     return ridge_mean_auc
+
+# +
 
 
 @typechecked
@@ -107,9 +118,12 @@ def train_lasso(
     aucs = {"lasso": []}
     lambda_vals = [1e-3, 1e-2, 1e-1, 1, 1e1, 1e2, 1e3]
 
-    ########################
-    ## Your Solution Here ##
-    ########################
+    for i in range(n):
+        for lambda_val in lambda_vals:
+            lasso = Lasso(alpha=lambda_val, max_iter=max_iter)
+            lasso.fit(x_train, y_train)
+            y_pred = lasso.predict(x_test)
+            aucs["ridge"].append(roc_auc_score(y_test, y_pred))
 
     print("lasso mean AUCs:")
     lasso_mean_auc = {}
@@ -118,6 +132,8 @@ def train_lasso(
         lasso_mean_auc[lambda_val] = lasso_auc
         print("lambda:", lambda_val, "AUC:", "%.4f" % lasso_auc)
     return lasso_mean_auc
+
+# +
 
 
 @typechecked
@@ -131,10 +147,11 @@ def ridge_coefficients(
     return the tuple consisting of trained Ridge model with alpha as optimal_alpha and the coefficients
     of the model
     """
-    ########################
-    ## Your Solution Here ##
-    ########################
-    pass
+    ridge: Ridge = Ridge(alpha=optimal_alpha, max_iter=max_iter)
+    ridge.fit(x_train, y_train)
+    return ridge, ridge.coef_
+
+# +
 
 
 @typechecked
@@ -148,10 +165,11 @@ def lasso_coefficients(
     return the tuple consisting of trained Lasso model with alpha as optimal_alpha and the coefficients
     of the model
     """
-    ########################
-    ## Your Solution Here ##
-    ########################
-    pass
+    lasso: Lasso = Lasso(alpha=optimal_alpha, max_iter=max_iter)
+    lasso.fit(x_train, y_train)
+    return lasso, lasso.ceof_
+
+# +
 
 
 @typechecked
@@ -163,10 +181,23 @@ def ridge_area_under_curve(
     i.e., model tarined with optimal_aplha
     Finally plot the ROC Curve using false_positive_rate, true_positive_rate as x and y axes calculated from roc_curve
     """
-    ########################
-    ## Your Solution Here ##
-    ########################
-    pass
+    y_prob = model_R.predict_proba(x_test)[:, 1]
+
+    fpr, tpr, thresholds = roc_curve(y_test, y_prob)
+    roc_auc = roc_auc_score(y_test, y_prob)
+    plt.plot(fpr, tpr, label='ROC curve (area = %0.2f)' % roc_auc)
+    plt.plot([0, 1], [0, 1], 'k--')
+    plt.xlim([0.0, 1.0])
+    plt.ylim([0.0, 1.05])
+    plt.xlabel('False Positive Rate')
+    plt.ylabel('True Positive Rate')
+    plt.title('Receiver operating characteristic')
+    plt.legend(loc="lower right")
+    plt.show()
+
+    return roc_auc
+
+# +
 
 
 @typechecked
@@ -182,6 +213,8 @@ def lasso_area_under_curve(
     ## Your Solution Here ##
     ########################
     pass
+
+# +
 
 
 class Node:
@@ -204,6 +237,8 @@ class Node:
         # value (of a variable) on which to split. For leaf nodes this is label/output value
         self.split_val = split_val
         self.data = data  # data can be anything! we recommend dictionary with all variables you need
+
+# +
 
 
 class TreeRegressor:
@@ -276,6 +311,8 @@ class TreeRegressor:
         ######################
         pass
 
+# +
+
 
 @typechecked
 def compare_node_with_threshold(node: Node, row: np.ndarray) -> bool:
@@ -288,6 +325,8 @@ def compare_node_with_threshold(node: Node, row: np.ndarray) -> bool:
     ######################
     pass
 
+# +
+
 
 @typechecked
 def predict(
@@ -297,6 +336,8 @@ def predict(
     ### YOUR CODE HERE ###
     ######################
     pass
+
+# +
 
 
 class TreeClassifier(TreeRegressor):
@@ -335,9 +376,11 @@ class TreeClassifier(TreeRegressor):
         pass
 
 
+# -
+
 if __name__ == "__main__":
     # Question 1
-    filename = ""  # Provide the path of the dataset
+    filename = "./Hitters.csv"  # Provide the path of the dataset
     df = read_data(filename)
     lambda_vals = [1e-3, 1e-2, 1e-1, 1, 1e1, 1e2, 1e3]
     max_iter = 1e8
