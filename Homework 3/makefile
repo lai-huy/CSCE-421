@@ -1,8 +1,8 @@
 run:
-	python3 assignment3.py
+	python3.10 assignment3.py
 
 notebook:
-	jupytext --to notebook assignmnet3.py
+	jupytext --to notebook assignment3.py
 
 python:
-	jupytext --to py assignmnet3.ipynb
+	jupytext --to py assignment3.ipynb
