@@ -1,0 +1,73 @@
+\documentclass{article}
+\usepackage[final]{neurips_2022}
+
+\usepackage[utf8]{inputenc} % allow utf-8 input
+\usepackage[T1]{fontenc}    % use 8-bit T1 fonts
+\usepackage{hyperref}       % hyperlinks
+\usepackage{url}            % simple URL typesetting
+\usepackage{booktabs}       % professional-quality tables
+\usepackage{amsfonts}       % blackboard math symbols
+\usepackage{nicefrac}       % compact symbols for 1/2, etc.
+\usepackage{microtype}      % microtypography
+\usepackage{xcolor}         % colors
+\usepackage{graphicx}
+
+
+\title{Homework 3}
+
+
+\author{
+    Huy Quang Lai \\
+    Department of Computer Science and Engineering\\
+    Texas A\&M University\\
+    College Station, Texas 77843 \\
+    \texttt{lai.huy@tamu.edu} \\
+}
+
+
+\begin{document}
+
+\maketitle
+
+\section{Prediction}
+\subsection{Train Ridge Regression}
+
+To tune the hyper-parameters of the Ridge Regression model, a grid search is performed over different values of \verb+alpha+, stored in \verb+lambda_vals+. The algorithm splits the data into training and validation sets and trains the model on the training set for each value of \verb+alpha+. Then the algorithm evaluates the model on the validation set and chooses the value of \verb+alpha+ that gives the highest ROC-AUC score.
+
+\noindent
+The algorithm stores the ROC-AUC score of the model for each value of \verb+alpha+ and iteration in a dictionary \verb+aucs+. After all iterations are completed, it calculates the mean ROC-AUC score of the model for each value of \verb+alpha+. The optimal value of \verb+alpha+ would be the one that gives the highest mean ROC-AUC score. When running this method, the optimal value is 10 with a ROC-AUC score of 0.9751.
+
+\subsection{Train Lasso}
+
+The function \verb+train_lasso+ performs hyper-parameter tuning for the Lasso regression model using similar approach to the Ridge Regression hyper-parameter tuning. Tuning is doing through a grid search approach.
+The algorithm loops through a set of lambda values, defined in \verb+lambda_vals+, and trains a Lasso model for each lambda value for \verb+n+ iterations.
+In each iteration, the algorithm fits the Lasso model on the training data and calculates the AUC-ROC score on the test data.
+The AUC-ROC score for each lambda value is stored in a dictionary \verb+aucs+ as a list of dictionaries where each dictionary contains a single lambda value and its corresponding AUC-ROC score.
+
+\noindent
+After the loop, the function calculates the mean AUC-ROC score for each lambda value by computing the mean of all AUC-ROC scores across all iterations. It then stores these mean AUC-ROC scores in a dictionary \verb+lasso_mean_auc+ and prints them out. Finally, the function returns the dictionary \verb+lasso_mean_auc+.
+
+To determine the optimal lambda value, the algorithm selects the lambda value that gives the highest AUC-ROC score, and uses that as the optimal lambda value. Upon executing the code, the lambda value of 0.1 was found with a AUC-ROC score of 0.9707.
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=0.75\textwidth]{ROC_Ridge.png}
+    \caption{ROC Curve for Ridge Regression}
+\end{figure}
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=0.75\textwidth]{ROC_Lasso.png}
+    \caption{ROC Curve for Lasso Regression}
+\end{figure}
+
+\clearpage
+\section*{References}
+{
+\small
+[1] Watt, Jeremy, Borhani, Reza \ \& Katsaggelos, Aggelos Konstantinos\ (2016) Machine Learning Refined.
+
+[2] Konasani, Venkata Reddy \ \& Shailendra Kadre\ (2021) Machine Learning and Deep Learning Using Python and TensorFlow.
+}
+
+\end{document}
