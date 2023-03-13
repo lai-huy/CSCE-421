@@ -32,8 +32,8 @@ def read_classification_data(file_path: str) -> Tuple[np.array, np.array]:
 		Order (np.array from first row), (np.array from second row)
 	'''
 	df: pd.DataFrame = pd.read_csv(file_path, header=None)
-	X: np.ndarray = df.iloc[:, 0].to_numpy().reshape(-1, 1)
-	y: np.ndarray = df.iloc[:, 1].to_numpy().reshape(-1, 1)
+	X: np.ndarray = df.iloc[:, 0].to_numpy().reshape(-1, 1)[:2, :]
+	y: np.ndarray = df.iloc[:, 1].to_numpy().reshape(-1, 1)[:2, :]
 	return X, y
 
 # -
@@ -257,7 +257,7 @@ def evaluate_c_d_pairs(X_train: pd.DataFrame, y_train: pd.DataFrame, X_test: pd.
 				X_train_folds = pd.concat([X_train[:start], X_train[end:]])
 				y_train_folds = pd.concat([y_train[:start], y_train[end:]])
 				
-				svm.fit(X_train_folds, y_train_folds)
+				svm.fit(X_train_folds, y_train_folds.values.ravel())
 				y_pred = svm.predict(X_val)
 				err = mean_absolute_error(y_val, y_pred)
 				errc.append(err)
@@ -284,7 +284,7 @@ def plot_test_errors(ERRAVGdcTEST: np.array, d_vals: np.array) -> None:
      Please write the code in below block to generate the graphs as described in the question.
      Note that the code will not be graded, but the graphs submitted in the report will be evaluated.
     '''
-    plt.plot(d_vals, ERRAVGdcTEST, marker='o')
+    plt.plot(d_vals, ERRAVGdcTEST, '-o')
     plt.title('Average Testing Error vs. Polynomial Kernel Degree')
     plt.xlabel('Degree of Polynomial Kernel')
     plt.ylabel('Average Testing Error')
@@ -304,10 +304,15 @@ def plot_avg_support_vec(SuppVect: np.array, d_vals: np.array) -> None:
 		Please write the code in below block to generate the graphs as described in the question.
 		Note that the code will not be graded, but the graphs submitted in the report will be evaluated.
 	'''
-	plt.plot(d_vals, SuppVect)
-	plt.xlabel('d')
-	plt.ylabel('Average number of support vectors')
-	plt.title('Average number of support vectors vs. d')
+	fig, ax = plt.subplots()
+	ax.plot(d_vals, SuppVect, '-o')
+	ax.set_xlabel('d')
+	ax.set_ylabel('Average number of support vectors')
+	ax.set_title('Average number of support vectors vs. d')
+
+	# Set the x and y limits for the plot
+	ax.set_ylim([np.min(SuppVect) * 0.99, np.max(SuppVect) * 1.01])
+
 	plt.show()
 
 
@@ -317,10 +322,15 @@ def plot_avg_violating_support_vec(vmd: np.array, d_vals: np.array) -> None:
 		Please write the code in below block to generate the graphs as described in the question.
 		Note that the code will not be graded, but the graphs submitted in the report will be evaluated.
 	'''
-	plt.plot(d_vals, vmd)
-	plt.xlabel('d')
-	plt.ylabel('Average number of violating support vectors')
-	plt.title('Average number of violating support vectors vs. d')
+	fig, ax = plt.subplots()
+	ax.plot(d_vals, vmd, '-o')
+	ax.set_xlabel('d')
+	ax.set_ylabel('Average number of support vectors')
+	ax.set_title('Average number of support vectors vs. d')
+
+	# Set the x and y limits for the plot
+	ax.set_ylim([np.min(vmd) * 0.99, np.max(vmd) * 1.01])
+ 
 	plt.show()
 
 
@@ -379,15 +389,15 @@ print("Weignt W: ", w)
 print("Bias b: ", b)
 plt.plot(range(num_iterations), costs)
 plt.show()
+# -
+
+# ################
+# ################
+# # Q3 a
+# ################
+# ################
 
 # +
-################
-################
-# Q3 a
-################
-################
-
-########################
 '''
 Below we load the data into dataframe.
 Provide the path for training and test data.
@@ -421,13 +431,15 @@ Xtrain_norm, Xtest_norm = normalize_data(Xtrain, Xtest)
 
 ytrain_bin_label = labels_to_binary(ytrain)
 ytest_bin_label = labels_to_binary(ytest)
+# -
+
+# ################
+# ################
+# # Q3 b
+# ################
+# ################
 
 # +
-################
-################
-# Q3 b
-################
-################
 '''
 ERRAVGdc is a matrix with ERRAVGdc[c][d] = "Average Mean Absolute Error" of 10 folds for 'C'=c and degree='d'
 ERRSTDdc is a matrix with ERRSTDdc[c][d] = "Standard Deviation" of 10 folds for 'C'=c and degree='d'
@@ -460,19 +472,21 @@ ERRAVGdc, ERRSTDdc = cross_validate_c_vals(
 	Xtrain_norm, ytrain_bin_label, n_folds, c_vals, d_vals)
 
 plot_cross_val_err_vs_c(ERRAVGdc, ERRSTDdc, c_vals, d_vals)
+# -
+
+# ################
+# ################
+# # Q3 c
+# ################
+# ################
 
 # +
-################
-################
-# Q3 c
-################
-################
 d_vals = [1, 2, 3, 4]
 n_folds = 5
 '''
 Use the results from above and Fill the best c values for d=1,2,3,4
 '''
-new_c_vals = [1, 1, 1, 1, 1]
+new_c_vals = [10 ** -2, 10 ** -2, 10 ** -2, 10 ** -2]
 
 
 '''
@@ -488,18 +502,21 @@ ERRAVGdcTEST, SuppVect, vmd, MarginT = evaluate_c_d_pairs(
 	Xtrain_norm, ytrain_bin_label, Xtest_norm, ytest_bin_label, n_folds, new_c_vals, d_vals)
 plot_test_errors(ERRAVGdcTEST, d_vals)
 
-################
-################
-# Q3 d
-################
-################
+# -
+
+# ################
+# ################
+# # Q3 d
+# ################
+# ################
+
 plot_avg_support_vec(SuppVect, d_vals)
 plot_avg_violating_support_vec(vmd, d_vals)
 
-################
-################
-# Q3 e
-################
-################
-plot_avg_hyperplane_margins(MarginT, d_vals)
+# ################
+# ################
+# # Q3 e
+# ################
+# ################
 
+plot_avg_hyperplane_margins(MarginT, d_vals)
