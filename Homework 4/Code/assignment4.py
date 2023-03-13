@@ -267,7 +267,7 @@ def plot_avg_hyperplane_margins(MarginT: np.array, d_vals: np.array) -> None:
 	Provide the path for data.
 	Implement- read_classification_data()
 '''
-classification_data_2d_path = "./data/2d_classification_data_entropy.csv"
+classification_data_2d_path = "./2d_classification_data_entropy.csv"
 x, y = read_classification_data(classification_data_2d_path)
 
 '''
@@ -300,8 +300,8 @@ Provide the path for training and test data.
 Implement- read_sat_image_data()
 '''
 
-sat_image_Training_path = "./data/satimageTraining.csv"
-sat_image_Test_path = "./data/satimageTest.csv"
+sat_image_Training_path = "./satimageTraining.csv"
+sat_image_Test_path = "./satimageTest.csv"
 
 train_df = read_sat_image_data(sat_image_Training_path)  # Training set
 test_df = read_sat_image_data(sat_image_Test_path)  # Testing set
