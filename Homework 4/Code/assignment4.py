@@ -32,8 +32,10 @@ def read_classification_data(file_path: str) -> Tuple[np.array, np.array]:
 		Order (np.array from first row), (np.array from second row)
 	'''
 	df: pd.DataFrame = pd.read_csv(file_path, header=None)
-	X: np.ndarray = df.iloc[:, 0].to_numpy().reshape(-1, 1)[:2, :]
-	y: np.ndarray = df.iloc[:, 1].to_numpy().reshape(-1, 1)[:2, :]
+	X: np.ndarray = np.array(df[0]).reshape((2, 1))
+	y: np.ndarray = np.array(df[1]).reshape((2, 1))
+	assert(df.size % 2 == 0)
+	assert(X.shape == (2, 1))
 	return X, y
 
 # -
@@ -49,18 +51,18 @@ def sigmoid(s: np.array) -> np.array:
 
 @typechecked
 def cost_function(w: float, b: float, X: np.array, y: np.array) -> float:
-    '''
+	'''
 		Inputs definitions:
 			w : weight
 			b : bias
 			X : input  with shape (number_of_rows_in_dataframe, 1)
 			y : target with shape (number_of_rows_in_dataframe, 1)
-		Return the loss as a float data type. 
-    '''
-    n = len(y)
-    y_pred = sigmoid(np.dot(X, w) + b)
-    loss = -np.sum(y * np.log(y_pred) + (1 - y) * np.log(1 - y_pred)) / n
-    return loss
+	Return the loss as a float data type. 
+	'''
+	n = len(y)
+	y_pred = sigmoid(np.dot(X, w) + b)
+	loss = -np.sum(y * np.log(y_pred) + (1 - y) * np.log(1 - y_pred)) / n
+	return loss
 
 
 @typechecked
