@@ -1,0 +1,29 @@
+\section{Accuracy of the Simple Linear Regression}
+Once the null hypothesis for $\beta_0$ and $\beta_1$ is rejected, a natural follow-up question is how well the model fits the data.
+
+\subsection{Residual Standard Error}
+One measure is the residual standard error
+\[RSE=\sqrt{\frac{RSS}{N-2}}\]
+
+However, it is not always clear what a good value of $RSE$ is.\\
+Another possible measure is the Coefficient of Determination.
+
+\subsection{The Coefficient of Determination}
+The Coefficient of Determination is defined as
+\[
+R^2=\frac{SEE}{TSS}
+\]
+
+Where the residual sum of squares and the total sum of squares, or $SSE$ and $TSS$ respectively, is defined as
+
+\begin{align*}
+   RSS &=\sum_{i=1}^{N}(\hat{y}-y_i)^2 \\
+   TSS &=\sum_{i=1}^{N}(\bar{y}-y_i)^2
+\end{align*}
+
+Proportion of variance explained, always between 0 and 1, independent of scale of $y$.
+The total sum of squares measures the total variance in response $y$.\\
+The residual sum of squares accounts for the remaining error left unexplained after the regression.
+
+When $R^2$ is close to 1, a large proportion of variation is explained by the regression. In contrast, when $R^2$ is close to 0, the regression does not explain the variation. Perhaps the model is wrong or $\sigma^2$ is too large.
+$R^2$ is a measure of the relationship between $x$ and $y$.

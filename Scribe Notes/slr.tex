@@ -1,0 +1,83 @@
+\section{Simple Linear Regression}
+
+A simple linear regression is a type of linear regression where there is only one independent variable.
+It is defined to be
+\[y=\beta_0+\beta_1x+\varepsilon,\varepsilon_i\sim\mathcal{N}(0,\sigma^2),i=1,2,\cdots,N\]
+
+The parameters, $\hat{\beta}_0$ and $\hat{\beta}_1$ can be derived by minimizing the residual sum of squares.
+\subsection{Optimal Coefficients}
+\begin{proof}
+\label{param}
+
+\begin{align*}
+\hat{\beta}_0   &= \bar{y}-\hat{\beta}_1\bar{x}\\
+\hat{\beta}_1   &= \frac{\sigma(xy)}{\sigma(x)^2}
+\end{align*}
+
+The Residual Sum of Squares is defined as
+\[RSS(\beta_0,\beta_1)=\sum_{i=1}^{N}(y_i-\beta_0-\beta_1x_i)^2\]
+
+Taking the partial derivative of $RSS$ with respect to $\beta_0$ and $\beta_1$ results in
+\begin{align*}
+\frac{\partial RSS(\beta_0,\beta_1)}{\partial\beta_0}   &= -2\sum_{i=1}^{N}(y_i-\beta_0-\beta_1x_i) \\
+\frac{\partial RSS(\beta_0,\beta_1)}{\partial\beta_1}   &= -2\sum_{i=1}^{N}(x_iy_i-\beta_0x_i-\beta_1x_i^2)
+\end{align*}
+
+To minimize these two variables, set both partial derivatives to zero.
+\begin{align*}
+-2\sum_{i=1}^{N}(y_i-\hat{\beta}_0-\hat{\beta}_1x_i)            &= 0 \\
+-2\sum_{i=1}^{N}(x_iy_i-\hat{\beta}_0x_i-\hat{\beta}_1x_i^2)    &= 0
+\end{align*}
+
+This yeilds the following system of equations
+\begin{align*}
+\hat{\beta}_1\sum_{i=1}^{N}x_i+\hat{\beta_0}N &= \sum_{i=1}^{N}y_i\\
+\hat{\beta}_1\sum_{i=1}^{N}x_i^2+\hat{\beta}_0\sum_{i=1}^{N}x_i &=\sum_{i=1}^{N}x_iy_i
+\end{align*}
+
+From the first equation, the estimate for the intercept can be derived:
+\begin{align*}
+\hat{\beta}_0   &=\frac{1}{N}\sum_{i=1}^{N}y_i-\hat{\beta}_1\frac{1}{N}\sum_{i=1}^{N}x_i \\
+                &=\bar{y}-\hat{\beta}_1\bar{x}
+\end{align*}
+
+\clearpage
+From the second equation, the estimate for the slope can be derived:
+\begin{align*}
+\hat{\beta_1}\sum_{i=1}^{N}x_i^2+\hat{\beta}_0\sum_{i=1}^{N}x_i &=\sum_{i=1}^{N}x_iy_i \\
+\hat{\beta_1}\sum_{i=1}^{N}x_i^2+(\bar{y}-\hat{\beta}_1\bar{x})\sum_{i=1}^{N}x_i &=\sum_{i=1}^{N}x_iy_i \\
+\hat{\beta}_1\left(\sum_{i=1}^{N}x_i^2-\bar{x}\sum_{i=1}^{N}x_i\right)  &= \sum_{i=1}^{N}x_iy_i-\bar{y}\sum_{i=1}^{N}x_i \\
+\hat{\beta}_1   &=\frac{\sum_{i=1}^{N}x_iy_i-\bar{y}\sum_{i=1}^{N}x_i}{\sum_{i=1}^{N}x_i^2-\bar{x}\sum_{i=1}^{N}x_i}
+\end{align*}
+
+Note that the numerator can be rewritten as
+\begin{align*}
+\sum_{i=1}^{N}x_iy_i-\bar{y}\sum_{i=1}^{N}x_i   &= \sum_{i=1}^{N}x_iy_i-n\bar{x}\bar{y} \\
+    &= \sum_{i=1}^{N}x_iy_i-n\bar{x}\bar{y}-n\bar{x}\bar{y}+n\bar{x}\bar{y} \\
+    &= \sum_{i=1}^{N}x_iy_i-\bar{y}\sum_{i=1}^{N}x_i-\bar{x}\sum_{i=1}^{N}y_i+\sum_{i=1}^{N}\bar{x}\bar{y} \\
+    &= \sum_{i=1}^{N}(x_iy_i-x_i\bar{y}-\bar{x}y_i+\bar{x}\bar{y}) \\
+    &= \sum_{i=1}^{N}(x_i-\bar{x})(y_i-\bar{y_i})
+\end{align*}
+
+and that the denominator can be rewritten as
+\begin{align*}
+\sum_{i=1}^{N}x_i^2-\bar{x}\sum_{i=1}^{N}x_i    &= \sum_{i=1}^{N}x_i^2-n\bar{x}^2 \\
+    &=\sum_{i=1}^{N}x_i^2-2n\bar{x}\bar{x}+n\bar{x}^2 \\
+    &=\sum_{i=1}^{N}x_i^2-2\bar{x}\sum_{i=1}^{N}x_i+\sum_{i=1}^{N}\bar{x}^2 \\
+    &=\sum_{i=1}^{N}(x_i^2-2\bar{x}x_i+\bar{x}^2)\\
+    &=\sum_{i=1}^{N}(x_i-\bar{x})^2
+\end{align*}
+
+Substituting these results into the original expression for $\hat{\beta}_1$ results in
+\begin{align*}
+\hat{\beta}_1   &= \frac{\sum_{i=1}^{N}(x_i-\bar{x})(y_i-\bar{y_i})}{\sum_{i=1}^{N}(x_i-\bar{x})^2}\\
+    &= \frac{\frac{1}{N-1}\sum_{i=1}^{N}(x_i-\bar{x})(y_i-\bar{y_i})}{\frac{1}{N-1}\sum_{i=1}^{N}(x_i-\bar{x})^2} \\
+    &= \frac{\sigma(xy)}{\sigma(x)^2}
+\end{align*}
+
+Therefore, the optimal parameters for a simple linear regression are,
+\begin{align*}
+\hat{\beta}_0   &= \bar{y}-\hat{\beta}_1\bar{x}\\
+\hat{\beta}_1   &= \frac{\sigma(xy)}{\sigma(x)^2}
+\end{align*}
+\end{proof}

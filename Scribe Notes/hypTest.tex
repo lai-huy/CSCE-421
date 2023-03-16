@@ -1,0 +1,42 @@
+\section{Hypothesis Testing}
+\subsection{The Hypothesis}
+The use of Standard Error allows for hypothesis testing. A very common hypothesis is the Null Hypothesis and its alternative hypothesis.
+\begin{align*}
+H_0 &:\text{There is no relationship between $x$ and $y$} \\
+H_a &:\text{There exists a relationship between $x$ and $y$}
+\end{align*}
+
+Mathematically this is equivalent to
+\begin{align*}
+H_0 &:\beta_1=0, \therefore y=\beta_0+\varepsilon \\
+H_a &:\beta_1\neq 0, \therefore \hat{\beta}_1>>0
+\end{align*}
+
+\subsection{T-statistic}
+\begin{align*}
+t_{\beta}&=\frac{\hat{\beta}_1-\beta}{SE\left(\hat{\beta}_1\right)} \\
+t_{\beta}&=\frac{\hat{\beta}}{SE\left(\hat{\beta}_1\right)} \text{ for } H_0
+\end{align*}
+
+If no relationship between $x$ and $y$ exists, the data is expected to be a t-distribution with P-2 degrees of freedom.
+Compute the probability of observing any number equal to $|t|$ or larger in absolute value, assuming $\beta_1=0$.
+This probability is called the p-value.
+For a small p-value, is unlikely to observe a substantial association between predictor and response due to chance.
+Therefore, a small p-value means there is an association between $x$ and $y$ so we can reject the null hypothesis.
+The cutoff is usually 5\% or 1\%
+
+\subsection{Example}
+
+\begin{table}[!ht]
+\caption{Data for the Example}
+\centering
+\begin{tabular}{l|llll}
+\hline
+          & Coefficient & Std. Error & t-statistic & p-value    \\ \hline
+Intercept & $7.0325$    & $0.4578$   & $15.36$     & $< 0.0001$ \\
+TV        & $0.0475$    & $0.0027$   & $17.67$     & $< 0.0001$ \\ \hline
+\end{tabular}
+\end{table}
+
+With the sample size of 30, the t-statistic for the null hypothesis of both the Intercept and TV is about $2$ and $2.75$ respectively.
+With this result, $\beta_0\neq0$ and $\beta_1\neq1$

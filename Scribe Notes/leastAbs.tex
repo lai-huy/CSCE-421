@@ -1,0 +1,15 @@
+\section{Least Absolutes}
+The residual sum of absolutes, or $RSA$, is defined as
+\[
+RSA=\sum_{i=1}^{N}\left|y_1\hat{\beta}_0-\hat{\beta}_1X_{1,N}\right|
+\]
+
+\subsection{Advantages over Least Squares}
+When an error is over $1$, squaring it will cause the error to increase. Additionally, when outliers exist, least squares becomes more susceptible to them and potentially overfits the model.
+
+As an example, of how least squares can overfit to outliers is displayed in the figure\footnote{Image source \href{https://demonstrations.wolfram.com/ComparingLeastSquaresFitAndLeastAbsoluteDeviationsFit/}{here}} below.
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{Images/lsla.png}
+    \caption{Least Squares vs Least Absolutes}
+\end{figure}

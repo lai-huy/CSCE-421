@@ -1,0 +1,36 @@
+\section{Defining a Linear Regression}
+Given a data set $\mathcal{D}=\{(\textbf{\textit{x}}_i,y_i)\}_{i=1}^{N}$ where $\textbf{\textit{x}}_i$ is a vector of length $D$ and $y_i$ is a scalar.
+
+Using $\mathcal{D}$ as the data set for a linear regression model, the linear regression is defined as:
+\[y_i=\beta_0+\beta_1x_{i,1}+\cdots+\beta_Dx_{i,D}+\varepsilon_i,i=1,\cdots,N\]
+
+Or in vector form,
+\[
+    y=\beta\textbf{\textit{X}}_i^T+\varepsilon,
+    y=\begin{bmatrix}
+        y_1\\
+        y_2\\
+        \vdots\\
+        y_D
+    \end{bmatrix},
+    \beta=\begin{bmatrix}
+        \beta_0 \\
+        \beta_1 \\
+        \vdots \\
+        \beta_D
+    \end{bmatrix},
+    X=\begin{bmatrix}
+        1 \\
+        x_{i,1} \\
+        \vdots \\
+        x_{i,D}
+    \end{bmatrix},
+    \varepsilon=\begin{bmatrix}
+        \varepsilon_1\\
+        \varepsilon_2\\
+        \vdots\\
+        \varepsilon_D
+    \end{bmatrix}
+\]
+
+This equation represents the true relationship between the dependent variables and the independent variable.

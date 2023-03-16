@@ -1,0 +1,38 @@
+\clearpage
+\section{Accuracy of Coefficient Estimates}
+\subsection{The Question of Coefficients}
+Assume that the true relationship of a simple linear regression is
+\[y=\beta_0+\beta_1x+\varepsilon,\varepsilon\sim\mathcal{N}(0,\sigma^2)\]
+
+However, when creating a linear regression, only a sample of the total population is used.
+
+For example, the following image\footnote{Image source: lecture slides} shows two possible linear regression models with a sample size of 100.
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=0.65\textwidth]{Images/linRegTwo.png}
+    \caption{Two possible Simple Linear Regression Models}
+\end{figure}
+
+Continuing the process for many simple linear regression models can result in the following graph\footnote{Image source: lecture slides}.
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=0.65\textwidth]{Images/linRegMany.png}
+    \caption{Many possible Simple Linear Regression Models}
+\end{figure}
+
+With the numerous possible simple linear regression models, a question arrises: which definition of $\hat{\beta}_0,\hat{\beta}_1$ and $\hat{\mu}$ is best?
+
+\subsection{Finding the Optimal Parameters}
+The Standard Error can assist in determining how much these parameters deviate from their true values.
+\begin{align*}
+SE\left(\hat{\mu}\right)^2      &= \frac{\sigma^2}{N} \\
+SE\left(\hat{\beta}_0\right)^2  &= \sigma^2\left(\frac{1}{N}+\frac{x^2}{\sum_{i=1}^{N}(x_i-\bar{x})^2}\right) \\
+SE\left(\hat{\beta}_1\right)^2  &=\frac{\sigma^2}{\sum_{i=1}^{N}(x_i-\bar{x})^2} \\
+\sigma^2    &= Var(\varepsilon)
+\end{align*}
+
+When $x_i$ is smaller values that are spread out, more leverage is required to estimate the slope. This will reduce $SE\left(\hat{\beta}_1\right)$.
+Additionally, when $\bar{x}=0$, $SE\left(\hat{\beta}_0\right)=SE\left(\bar{\mu}\right)$
+
+$\sigma$ itself, however is not knows. But a good estimate of its value is the residual standard error
+\[RSE=\sqrt{\frac{RSS}{N-2}}\]

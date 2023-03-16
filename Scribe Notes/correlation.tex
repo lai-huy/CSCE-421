@@ -1,0 +1,71 @@
+\clearpage
+\section{Correlation Coefficient in Simple Linear Regression}
+The correlation of two random variables $X$ and $Y$, also called Pearson product-moment correlation coefficient, is defined as
+\[
+r=\frac{\sigma(xy)}{\sigma(x)\sigma(y)}
+\]
+
+An alternative definitions for the correlation coefficient is
+\[
+r=\frac{\sum_{i=1}^{N}(x_i-\bar{x})(y_i-\bar{y})}{\sqrt{\sum_{i=1}^{N}(x-\bar{x})^2}\sqrt{\sum_{i=1}^{N}(y-\bar{y})^2}}
+\]
+
+\subsection{Relationship with the Slope Estimate}
+In simple linear regression the correlation coefficient is related to the slope of the simple linear regression.
+\[r=\frac{\sigma(x)}{\sigma(y)}\hat{\beta}_1\]
+
+\begin{proof}
+\label{slope}
+
+Using the definition of correlation,
+\begin{align*}
+r           &=\frac{\sigma(xy)}{\sigma(x)\sigma(y)}\\
+\sigma(xy)  &=\sigma(x)\sigma(y)r
+\end{align*}
+
+Substituting this derivation into the definition of $\hat{\beta_1}$ derived in Proof \ref{param} results in
+\begin{align*}
+\hat{\beta}_1       &=\frac{\sigma(x)\sigma(y)r}{\sigma(x)^2} \\
+                    &=\frac{\sigma(y)}{\sigma(x)}r \\
+ \Leftrightarrow r  &=\frac{\sigma(x)}{\sigma(y)}\hat{\beta}_1
+\end{align*}
+\end{proof}
+
+\subsection{Relationship with the Coefficient of Determination}
+In simple linear regression the correlation coefficient is related to the coefficient of determination, or $R^2$.
+\[
+r^2=R^2
+\]
+
+\begin{proof}
+
+Recall from Proof \ref{param} that the optimal definitions of the simple linear regression coefficients, $\hat{\beta}_0$ and $\hat{\beta}_1$ are
+\begin{align*}
+\hat{\beta}_0   &= \bar{y}-\hat{\beta}_1\bar{x} \\
+\hat{\beta}_1   &= \frac{\sigma(xy)}{\sigma(x)^2}
+\end{align*}
+
+Additionally, recall that coefficient of determination, $R^2$, is defined as
+\[R^2=\frac{SSE}{TSS}\]
+
+Using the definition of the coefficient of determination,
+\begin{align*}
+R^2 &= \frac{\sum_{i=1}^{N}(\hat{y}-y_i)^2}{\sum_{i=1}^{N}(\bar{y}-y_i)^2} \\
+    &= \frac{\sum_{i=1}^{N}(\bar{y}-\hat{\beta}_0-\hat{\beta_1}x_i)^2}{\sum_{i=1}^{N}(y_i-\bar{y})^2}
+\end{align*}
+
+Substituting the definition of $\hat{\beta_0}$ results in
+\begin{align*}
+R^2 &= \frac{\sum_{i=1}^{N}(\bar{y}-\bar{y}+\hat{\beta}_1\bar{x}-\hat{\beta_1}x_i)^2}{\sum_{i=1}^{N}(y_i-\bar{y})^2} \\
+    &= \frac{\sum_{i=1}^{N}(\hat{\beta_1}(\bar{x}-x_i))^2}{\sum_{i=1}^{N}(y_i-\bar{y})^2} \\
+    &= \hat{\beta}_1^2\frac{\sum_{i=1}^{N}(\bar{x}-x_i)^2}{\sum_{i=1}^{N}(y_i-\bar{y})^2} \\
+    &= \hat{\beta}_1^2\frac{\frac{1}{N-1}\sum_{i=1}^{N}(\bar{x}-x_i)^2}{\frac{1}{N-1}\sum_{i=1}^{N}(y_i-\bar{y})^2} \\
+    &= \hat{\beta}_1^2\frac{\sigma(x)^2}{\sigma(y)^2} \\
+    &= \left(\hat{\beta}_1\frac{\sigma(x)}{\sigma(y)}\right)^2
+\end{align*}
+
+Recall from Proof \ref{slope} that
+\[r=\frac{\sigma(x)}{\sigma(y)}\hat{\beta}_1\]
+Using this relationship,
+\[R^2=r^2\]
+\end{proof}
