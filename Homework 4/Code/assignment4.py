@@ -18,12 +18,8 @@ from typing import Tuple
 random.seed(42)
 np.random.seed(42)
 
-# ###############
-# ###############
-# Q1
-# ###############
-# ###############
 
+# # Q1
 
 @typechecked
 def read_classification_data(file_path: str) -> Tuple[np.array, np.array]:
@@ -92,8 +88,8 @@ def cross_entropy_optimizer(w: float, b: float, X: np.array, y: np.array, num_it
 		z = np.dot(X, w) + b
 		a = sigmoid(z)
 		dz = a - y
-		dw = (1/m) * np.dot(X.T, dz)
-		db = (1/m) * np.sum(dz)
+		dw = np.dot(X.T, dz) / m
+		db = np.sum(dz) / m
 
 		# Update parameters
 		w -= float(alpha * dw)
@@ -104,11 +100,7 @@ def cross_entropy_optimizer(w: float, b: float, X: np.array, y: np.array, num_it
 
 	return w, b, costs
 
-# ###############
-# ###############
-# Q3 a
-# ###############
-# ###############
+# # Q3 a
 
 
 @typechecked
@@ -160,13 +152,10 @@ def labels_to_binary(y: pd.DataFrame) -> pd.DataFrame:
     return y_binary
 
 
-# ###############
-# ###############
 # # Q3 b
-# ###############
-# ###############
-# +
 
+
+# +
 
 @typechecked
 def cross_validate_c_vals(X: pd.DataFrame, y: pd.DataFrame, n_folds: int, c_vals: np.array, d_vals: np.array) -> Tuple[np.array, np.array]:
@@ -176,24 +165,24 @@ def cross_validate_c_vals(X: pd.DataFrame, y: pd.DataFrame, n_folds: int, c_vals
     '''
     ERRAVGdc = np.zeros((len(c_vals), len(d_vals)))
     ERRSTDdc = np.zeros((len(c_vals), len(d_vals)))
+    
+    skf = StratifiedKFold(n_splits=n_folds, shuffle=True)
 
-    for i, c in enumerate(c_vals):
-        for j, d in enumerate(d_vals):
-            fold_errors = np.zeros(n_folds)
-            svr = SVR(kernel='sigmoid', degree=d, C=c)
-
-            kfold = KFold(n_splits=n_folds, shuffle=True, random_state=42)
-
-            for k, (train_indices, test_indices) in enumerate(kfold.split(X, y)):
-                X_train, y_train = X.iloc[train_indices], y.iloc[train_indices]
-                X_test, y_test = X.iloc[test_indices], y.iloc[test_indices]
-
-                svr.fit(X_train, y_train.values.ravel())
-                y_pred = svr.predict(X_test)
-                fold_errors[k] = mean_absolute_error(y_test, y_pred)
-
-            ERRAVGdc[i, j] = np.mean(fold_errors)
-            ERRSTDdc[i, j] = np.std(fold_errors)
+    for i, c_val in enumerate(c_vals):
+        for j, d_val in enumerate(d_vals):
+            err_list = []
+            
+            for train, test in skf.split(X, y):
+                X_train, X_test = X.iloc[train], X.iloc[test]
+                y_train, y_test = y.iloc[train], y.iloc[test]
+                
+                svc = SVC(kernel="poly", degree=d_val, C=c_val)
+                svc.fit(X_train, y_train.values.ravel())
+                y_pred = svc.predict(X_test)
+                err_list.append(mean_absolute_error(y_test, y_pred))
+            
+            ERRAVGdc[i][j] = np.mean(err_list)
+            ERRSTDdc[i][j] = np.std(err_list)
 
     return ERRAVGdc, ERRSTDdc
 
@@ -221,11 +210,7 @@ def plot_cross_val_err_vs_c(ERRAVGdc: np.array, ERRSTDdc: np.array, c_vals: np.a
 	plt.show()
 
 
-# ###############
-# ###############
 # # Q3 c
-# ###############
-# ###############
 
 @typechecked
 def evaluate_c_d_pairs(X_train: pd.DataFrame, y_train: pd.DataFrame, X_test: pd.DataFrame, y_test: pd.DataFrame, n_folds: int, c_vals: np.array, d_vals: np.array) -> Tuple[np.array, np.array, np.array, np.array]:
@@ -248,7 +233,7 @@ def evaluate_c_d_pairs(X_train: pd.DataFrame, y_train: pd.DataFrame, X_test: pd.
     vmd = np.zeros(d_val_len)
     MarginT = np.zeros(d_val_len)
 
-    for d_idx, d in enumerate(d_vals):
+    for j, d in enumerate(d_vals):
         ERRc = []
         SuppVectc = []
         vmdc = []
@@ -280,10 +265,10 @@ def evaluate_c_d_pairs(X_train: pd.DataFrame, y_train: pd.DataFrame, X_test: pd.
             vmdc.append(np.mean(vmdcc))
             MarginTc.append(np.mean(marginTc))
 
-        ERRAVGdcTEST[d_idx] = np.min(ERRc)
-        SuppVect[d_idx] = np.mean(SuppVectc)
-        vmd[d_idx] = np.mean(vmdc)
-        MarginT[d_idx] = np.mean(MarginTc)
+        ERRAVGdcTEST[j] = np.min(ERRc)
+        SuppVect[j] = np.mean(SuppVectc)
+        vmd[j] = np.mean(vmdc)
+        MarginT[j] = np.mean(MarginTc)
 
     return ERRAVGdcTEST, SuppVect, vmd, MarginT
 
@@ -295,24 +280,20 @@ def plot_test_errors(ERRAVGdcTEST: np.array, d_vals: np.array) -> None:
         Note that the code will not be graded, but the graphs submitted in the report will be evaluated.
     '''
     plt.plot(d_vals, ERRAVGdcTEST, '-o')
-    plt.title('Average Testing Error vs. Polynomial Kernel Degree')
-    plt.xlabel('Degree of Polynomial Kernel')
+    plt.title('Average Testing Error vs. Kernel Degree')
+    plt.xlabel('Degree of Kernel')
     plt.ylabel('Average Testing Error')
     plt.xticks(d_vals)
     plt.show()
 
 
-# ################
-# ################
 # # Q3 d
-# ################
-# ################
 
 @typechecked
 def plot_avg_support_vec(SuppVect: np.array, d_vals: np.array) -> None:
     '''
-                    Please write the code in below block to generate the graphs as described in the question.
-                    Note that the code will not be graded, but the graphs submitted in the report will be evaluated.
+        Please write the code in below block to generate the graphs as described in the question.
+        Note that the code will not be graded, but the graphs submitted in the report will be evaluated.
     '''
     fig, ax = plt.subplots()
     ax.plot(d_vals, SuppVect, '-o')
@@ -329,8 +310,8 @@ def plot_avg_support_vec(SuppVect: np.array, d_vals: np.array) -> None:
 @typechecked
 def plot_avg_violating_support_vec(vmd: np.array, d_vals: np.array) -> None:
     '''
-                    Please write the code in below block to generate the graphs as described in the question.
-                    Note that the code will not be graded, but the graphs submitted in the report will be evaluated.
+        Please write the code in below block to generate the graphs as described in the question.
+        Note that the code will not be graded, but the graphs submitted in the report will be evaluated.
     '''
     fig, ax = plt.subplots()
     ax.plot(d_vals, vmd, '-o')
@@ -344,22 +325,18 @@ def plot_avg_violating_support_vec(vmd: np.array, d_vals: np.array) -> None:
     plt.show()
 
 
-# ################
-# ################
 # # Q3 e
-# ################
-# ################
 
 @typechecked
 def plot_avg_hyperplane_margins(MarginT: np.array, d_vals: np.array) -> None:
     '''
-                    Please write the code in below block to generate the graphs as described in the question.
-                    Note that the code will not be graded, but the graphs submitted in the report will be evaluated.
+        Please write the code in below block to generate the graphs as described in the question.
+        Note that the code will not be graded, but the graphs submitted in the report will be evaluated.
     '''
     plt.plot(d_vals, MarginT, '-o')
-    plt.xlabel('Degree of Polynomial Kernel')
+    plt.xlabel('Degree of Kernel')
     plt.ylabel('Average Margin of Hyperplane')
-    plt.title('Average Margin of Hyperplane vs Degree of Polynomial Kernel')
+    plt.title('Average Margin of Hyperplane vs Degree of Kernel')
     plt.show()
 
 
@@ -401,11 +378,7 @@ plt.plot(range(num_iterations), costs)
 plt.show()
 # -
 
-# ################
-# ################
 # # Q3 a
-# ################
-# ################
 
 # +
 '''
@@ -443,11 +416,7 @@ ytrain_bin_label = labels_to_binary(ytrain)
 ytest_bin_label = labels_to_binary(ytest)
 # -
 
-# ################
-# ################
 # # Q3 b
-# ################
-# ################
 
 # +
 '''
@@ -483,11 +452,7 @@ ERRAVGdc, ERRSTDdc = cross_validate_c_vals(
 plot_cross_val_err_vs_c(ERRAVGdc, ERRSTDdc, c_vals, d_vals)
 # -
 
-# ################
-# ################
 # # Q3 c
-# ################
-# ################
 
 # +
 d_vals = [1, 2, 3, 4]
@@ -495,7 +460,7 @@ n_folds = 5
 '''
 Use the results from above and Fill the best c values for d=1,2,3,4
 '''
-new_c_vals = [10 ** -2, 10 ** -2, 10 ** -2, 10 ** -2]
+new_c_vals = [100, 10, 100, 100]
 
 
 '''
@@ -513,19 +478,11 @@ plot_test_errors(ERRAVGdcTEST, d_vals)
 
 # -
 
-# ################
-# ################
 # # Q3 d
-# ################
-# ################
 
 plot_avg_support_vec(SuppVect, d_vals)
 plot_avg_violating_support_vec(vmd, d_vals)
 
-# ################
-# ################
 # # Q3 e
-# ################
-# ################
 
 plot_avg_hyperplane_margins(MarginT, d_vals)
