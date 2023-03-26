@@ -1,0 +1,90 @@
+\documentclass{article}
+\usepackage[final]{neurips_2022}
+
+\usepackage[utf8]{inputenc} % allow utf-8 input
+\usepackage[T1]{fontenc}    % use 8-bit T1 fonts
+\usepackage{hyperref}       % hyperlinks
+\usepackage{url}            % simple URL typesetting
+\usepackage{booktabs}       % professional-quality tables
+\usepackage{amsfonts}       % blackboard math symbols
+\usepackage{nicefrac}       % compact symbols for 1/2, etc.
+\usepackage{microtype}      % microtypography
+\usepackage{xcolor}         % colors
+\usepackage{amsmath}
+\usepackage{graphicx}
+
+
+\title{Formatting Instructions For NeurIPS 2022}
+
+\author{
+    Huy Quang Lai \\
+    Department of Computer Science and Engineering\\
+    Texas A\&M University\\
+    College Station, Texas 77843 \\
+    \texttt{lai.huy@tamu.edu} \\
+}
+
+\begin{document}
+
+\maketitle
+
+\section{Implement Cross Entropy Cost}
+
+There is no writing part for this question.
+
+\section{Multi-class Perceptron}
+\[g(w_0,\cdots,w_{C-1})=\frac{1}{P}\sum_{p=1}^{P}\left[\max_{j=0,\cdots,C-1}\left(0,-y_p \overset{\circ}{\textbf{x}}_p^T \textbf{w}_j\right)-\overset{\circ}{\textbf{x}}_p^T\textbf{w}_{y_p}\right]\]
+
+When $C=2$, the multi-class Perceptron cost reduces to the two-class version.
+\[g(\textbf{w})=\frac{1}{P}\sum_{p=1}^{P}\max\left(0,-y_p\overset{\circ}{\textbf{x}}_p^T\textbf{w}\right)\]
+
+\clearpage
+\section{Complete ML Pipeline}
+\subsection{Data Preprocessing}
+No writing for this part
+
+\subsection{Hyperparameter Tuning}
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{Cross Validation Error.png}
+    \caption{Cross Validation Errors vs C}
+\end{figure}
+
+\clearpage
+\subsection{Model Training and Testing}
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{Error.png}
+    \caption{Average Testing Error}
+\end{figure}
+
+\clearpage
+\subsection{Results Evaluation}
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=0.9\textwidth]{ASV.png}
+    \caption{Average Number of Support Vectors}
+\end{figure}
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=0.9\textwidth]{AVSV.png}
+    \caption{Average Number of Violating Support Vectors}
+\end{figure}
+
+\clearpage
+\subsection{Conceptual}
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{Hyperplane.png}
+    \caption{Average Margin of Hyperplane}
+\end{figure}
+
+\section*{References}
+{
+\small
+[1] Watt, Jeremy, Borhani, Reza \ \& Katsaggelos, Aggelos Konstantinos\ (2016) Machine Learning Refined.
+
+[2] Konasani, Venkata Reddy \ \& Shailendra Kadre\ (2021) Machine Learning and Deep Learning Using Python and TensorFlow.
+}
+\end{document}
