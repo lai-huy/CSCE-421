@@ -3,6 +3,8 @@ Homework 6/MNIST_data/
 
 *.png
 *.gpg
+*.pickle
+new_model
 An Introduction to Statistical Learning.pdf
 Machine Learning Refined.pdf
 Syllabus.pdf
