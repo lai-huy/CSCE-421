@@ -1,4 +1,4 @@
-# CSCE 421
+# CSCE 421: Machine Learning
 ## Course Discription
 Theoretical foundations of machine learning, pattern recognition and generating predictive models and classifiers from data; includes methods for supervised and unsupervised learning (decision trees, linear discriminants, neural networks, Gaussian models, non-parametric models, clustering, dimensionality reduction, deep learning), optimization procedures and statistical inference.
 
