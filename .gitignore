@@ -1,5 +1,6 @@
 Classwork/
 Homework 6/MNIST_data/
+.vscode/
 
 *.png
 *.gpg
@@ -8,3 +9,4 @@ new_model
 An Introduction to Statistical Learning.pdf
 Machine Learning Refined.pdf
 Syllabus.pdf
+
